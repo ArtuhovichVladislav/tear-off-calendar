@@ -257,7 +257,21 @@ function ensureAudio() {
       master = comp;
     } catch { actx = null; master = null; }
   }
-  if (actx && actx.state === 'suspended') void actx.resume();
+  // iOS после сворачивания вкладки ставит 'interrupted', а не 'suspended'
+  if (actx && actx.state !== 'running') {
+    actx.resume().catch(() => { /* не жест пользователя — повторим на следующем */ });
+    // старый iOS Safari «просыпается», только если в жесте реально что-то проиграть
+    const blip = actx.createBufferSource();
+    blip.buffer = actx.createBuffer(1, 1, actx.sampleRate);
+    blip.connect(actx.destination);
+    blip.start();
+  }
+}
+
+// Мобильные браузеры разрешают запуск звука только в «активирующих» событиях — pointerup/touchend/click/keydown,
+// а pointerdown от пальца к ним не относится. Поэтому разблокируем звук на любом таком событии на странице.
+for (const ev of ['pointerup', 'touchend', 'click', 'keydown']) {
+  window.addEventListener(ev, ensureAudio, { capture: true, passive: true });
 }
 
 type SoundKind = 'snap' | 'rustle' | 'crackle' | 'whoosh';
