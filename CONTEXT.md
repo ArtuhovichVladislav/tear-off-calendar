@@ -18,7 +18,7 @@
 
 Содержимое листа: месяц, крупное число, день недели (выходные и праздники РФ — красным), восход/закат/долгота дня (NOAA, Москва, UTC+3), фаза луны с SVG-иконкой, ISO-неделя, номер дня в году, сколько дней осталось, короткая сезонная заметка (оригинальные тексты, по 3 на месяц).
 
-Интерфейс полностью на русском. Опубликованная версия: https://claude.ai/artifact/EWUvAKQsVrHRD1zfhWVxDu
+Интерфейс полностью на русском. Опубликованная версия: https://tear-off-calendar.netlify.app
 
 ## Файлы
 
@@ -30,7 +30,7 @@
 | `index.html` | Разметка; открывается напрямую из файловой системы |
 | `tsconfig.json` | Настройки компиляции (ES2019, strict, noUnusedLocals) |
 | `build.py` | Встраивает CSS и JS в один файл `dist/tear-calendar.html` |
-| `dist/tear-calendar.html` | Самодостаточная сборка — её публикуют как артефакт |
+| `dist/tear-calendar.html` | Самодостаточная сборка в один файл (для раздачи без сервера; на Netlify не нужна) |
 | `tests/regression.py` | Регрессионные проверки в headless Chromium (Playwright) |
 
 Сборка и проверка:
@@ -48,7 +48,7 @@ python3 tests/regression.py          # 29 проверок, скриншоты �
 1. **Типы и векторная математика**: `Vec`, `CurlInfo`, `Flyer`, `Flight`, `v/dot/dist/clamp`.
 2. **Даты и данные**: `MONTHS`, `WEEKDAYS`, `HOLIDAYS` (ключ `MM-DD`, `off` = выходной), `NOTES[месяц][3]`, `sunTimes`, `moonPhase`, `moonSvg`, `pageHTML(date)` — HTML содержимого листа.
 3. **Геометрия загиба**: `clipHalf` (отсечение многоугольника полуплоскостью), `polyCss`, класс `Sheet`.
-4. **Звук**: `paperSound('snap' | 'rustle' | 'crackle' | 'whoosh', intensity)`, всё идёт через общий `master` (DynamicsCompressor), чтобы наложившиеся хрусты не клипповали; хранилище `store` (localStorage с try/catch, префикс `tearcal:`). Когда звучит: тихий шорох при захвате, шорох по мере движения листа (`moveRustle`, громкость от скорости), шлепок загиба при отпускании без отрыва, хруст перфорации, щелчок отрыва, взмах (`whoosh`) при броске.
+4. **Звук**: `paperSound('snap' | 'rustle' | 'crackle' | 'whoosh', intensity)`, всё идёт через общий `master` (DynamicsCompressor), чтобы наложившиеся хрусты не клипповали; хранилище `store` (localStorage с try/catch, префикс `tearcal:`). Когда звучит: тихий шорох при захвате, шорох по мере движения листа (`moveRustle`, громкость от скорости), шлепок загиба при отпускании без отрыва, хруст перфорации, щелчок отрыва, взмах (`whoosh`) при броске. `AudioContext` запускается (`ensureAudio`) на `pointerup`/`touchend`/`click`/`keydown` всей страницы: на мобилках `pointerdown` от пальца не даёт браузеру права включить звук. На iPhone в беззвучном режиме WebAudio всё равно молчит.
 5. **Состояние приложения** и функции: `constrainWith`, `addTear`, `render`, `mountSheet`, `layout`, `detach`, `throwHeld`, `PLANS` + `autoTear` + `finishAuto`, `restore`, `goToday`, `dragTo`, `hoverPeek`, `endDrag`, главный цикл `frame`.
 
 ### Геометрия загиба (ядро эффекта)
@@ -107,9 +107,9 @@ python3 tests/regression.py          # 29 проверок, скриншоты �
 - Размер календаря (`layout`) подбирается по фактической высоте сцены (`sceneHeight`): календарь масштабируется через `--s`, кнопки и подсказка — нет, поэтому `W` уменьшают, пока всё не влезет в окно без прокрутки (до 4 итераций, `W` в пределах 220–380). После загрузки веб-шрифтов размер пересчитывается ещё раз, если лист не надорван.
 - `prefers-reduced-motion`: нет качания, полёт короче, кнопка отрывает мгновенно.
 
-## Ограничения опубликованной страницы (артефакт claude.ai)
+## Публикация
 
-Один самодостаточный HTML до 16 МБ. Внешние скрипты только с cdnjs/jsdelivr/cdn.tailwindcss.com/code.jquery.com (сейчас не используются), стили только с fonts.googleapis.com. Никаких удалённых картинок и запросов к другим сайтам. localStorage доступен (обёрнут в try/catch).
+Сайт на Netlify (https://tear-off-calendar.netlify.app) обновляется сам после пуша в `main`: он раздаёт корень репозитория (`index.html`, `styles.css`, `calendar.js`). Поэтому скомпилированный `calendar.js` нужно коммитить вместе с `calendar.ts`.
 
 ## Идеи на будущее (не сделано)
 
