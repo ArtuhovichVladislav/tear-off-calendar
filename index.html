@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Отрывной календарь</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,600;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="scene">
+  <div class="hang" id="hang">
+    <div class="nail" aria-hidden="true"></div>
+    <svg class="string" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M50 2 L4 40 M50 2 L96 40"/>
+    </svg>
+    <div class="board">
+      <div class="board-head"><span class="board-year" id="boardYear">2026</span></div>
+      <div class="pad" id="pad" aria-label="Лист календаря. Потяните за нижний уголок, чтобы загнуть и оторвать.">
+        <div class="stack" id="stack" aria-hidden="true"></div>
+        <div class="page under" id="under" aria-hidden="true"></div>
+        <div class="shadow-clip" id="shadowClip" aria-hidden="true"><div class="shadow-strip" id="shadowStrip"></div></div>
+        <div class="tear-gap-clip" id="tearGapClip" aria-hidden="true"><div class="tear-gap" id="tearGap"></div></div>
+        <div class="sheets" id="sheets"></div>
+        <div class="stub-wrap" aria-hidden="true"><div class="stub" id="stub"></div></div>
+        <div class="binding" aria-hidden="true"></div>
+        <div class="flaps" id="flaps" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="controls" aria-label="Листание календаря">
+    <button class="btn" id="btnBack" type="button" aria-label="Вернуть лист">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>
+      <span class="lbl">Вернуть лист</span>
+    </button>
+    <button class="btn" id="btnToday" type="button">Сегодня</button>
+    <button class="btn" id="btnTear" type="button" aria-label="Оторвать лист">
+      <span class="lbl">Оторвать</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v9l-3 2-3-2-3 2-3-2-2 1.3z"/><path d="M8 19.5 6.5 22M15 19l2 2.5"/></svg>
+    </button>
+    <button class="btn btn-icon" id="btnSound" type="button" aria-pressed="true" aria-label="Выключить звук">
+      <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+      <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 6 6M22 9l-6 6"/></svg>
+    </button>
+  </nav>
+  <p class="hint">Тяните нижний уголок: сначала лист загибается, а если тянуть дальше, перфорация рвётся ровно настолько, насколько потянули. Оторванный лист можно подержать и бросить. Корешок вниз возвращает вчерашний день, клавиши ← и → листают.</p>
+  <div class="sr-only" aria-live="polite" id="live"></div>
+</main>
+<div class="fly" id="fly" aria-hidden="true"></div>
+<script src="calendar.js"></script>
+</body>
+</html>

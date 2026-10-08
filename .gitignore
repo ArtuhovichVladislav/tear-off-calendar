@@ -1,0 +1,8 @@
+.DS_Store
+__pycache__/
+
+# Build output: python3 build.py
+dist/
+
+# Regression test screenshots
+tests/out/
